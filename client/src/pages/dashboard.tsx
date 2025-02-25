@@ -18,13 +18,17 @@ export default function Dashboard() {
     }
   }, [transcript]);
 
+  const handleTest = (testTranscript: string) => {
+    sendMessage({ type: 'transcript', text: testTranscript });
+  };
+
   const analysis = lastMessage?.type === 'analysis' ? lastMessage.consultation : null;
 
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <h1 className="text-3xl font-bold text-foreground">Clinical Decision Support</h1>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="p-6">
             <TranscriptionPane 
@@ -32,6 +36,7 @@ export default function Dashboard() {
               isListening={isListening}
               onStart={startListening}
               onStop={stopListening}
+              onTest={handleTest}
             />
           </Card>
 
@@ -43,15 +48,15 @@ export default function Dashboard() {
                 <TabsTrigger value="pathway">Clinical Pathway</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="soap">
+              <TabsContent value="soap" className="mt-4">
                 <SOAPNote note={analysis?.soapNote} />
               </TabsContent>
 
-              <TabsContent value="diagnoses">
+              <TabsContent value="diagnoses" className="mt-4">
                 <DiagnosisList diagnoses={analysis?.diagnoses} />
               </TabsContent>
 
-              <TabsContent value="pathway">
+              <TabsContent value="pathway" className="mt-4">
                 <ClinicalPathway pathway={analysis?.clinicalPathway} />
               </TabsContent>
             </Tabs>
