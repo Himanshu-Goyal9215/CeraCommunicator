@@ -5,13 +5,21 @@ import TranscriptionPane from "@/components/consultation/TranscriptionPane";
 import SOAPNote from "@/components/consultation/SOAPNote";
 import DiagnosisList from "@/components/consultation/DiagnosisList";
 import ClinicalPathway from "@/components/consultation/ClinicalPathway";
+import RecentInsights from "@/components/consultation/RecentInsights";
 import { useWebSocket } from "@/lib/useWebSocket";
 import { useSpeechRecognition } from "@/lib/useSpeechRecognition";
 import { Stethoscope } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { type Consultation } from "@shared/schema";
 
 export default function Dashboard() {
   const { transcript, isListening, startListening, stopListening } = useSpeechRecognition();
   const { connected, lastMessage, sendMessage } = useWebSocket();
+
+  // Fetch recent consultations
+  const { data: consultations } = useQuery<Consultation[]>({
+    queryKey: ['/api/consultations'],
+  });
 
   useEffect(() => {
     if (transcript) {
@@ -39,9 +47,9 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Transcription */}
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left Column - Transcription and Analysis */}
+          <div className="lg:col-span-8 space-y-8">
             <Card className="shadow-lg">
               <TranscriptionPane 
                 transcript={transcript}
@@ -51,10 +59,7 @@ export default function Dashboard() {
                 onTest={handleTest}
               />
             </Card>
-          </div>
 
-          {/* Right Column - Analysis */}
-          <div className="space-y-6">
             <Card className="shadow-lg">
               <Tabs defaultValue="soap" className="p-6">
                 <TabsList className="grid grid-cols-3 w-full">
@@ -78,6 +83,11 @@ export default function Dashboard() {
                 </div>
               </Tabs>
             </Card>
+          </div>
+
+          {/* Right Column - Recent Insights */}
+          <div className="lg:col-span-4 space-y-6">
+            <RecentInsights consultations={consultations} />
           </div>
         </div>
       </main>
