@@ -68,31 +68,40 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
         ))}
       </div>
 
+      {/* Transcript display */}
+      {transcript && (
+        <div className="w-full max-w-lg mx-auto mb-6">
+          <div className="bg-gray-100 p-4 rounded-lg text-gray-800 min-h-[100px] max-h-[200px] overflow-y-auto">
+            {transcript}
+          </div>
+        </div>
+      )}
+
       {/* Control buttons */}
       <div className="space-y-3">
         {isListening ? (
           <Button
             variant="destructive"
-            size="lg"
-            className="w-32 rounded-full bg-pink-600 hover:bg-pink-700"
+            size="sm"
+            className="w-24 rounded-full bg-pink-600 hover:bg-pink-700"
             onClick={onStop}
           >
             stop
           </Button>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex gap-2 items-center justify-center">
             <Button
               variant="default"
-              size="lg"
-              className="w-32 rounded-full bg-blue-600 hover:bg-blue-700"
+              size="sm"
+              className="w-24 rounded-full bg-blue-600 hover:bg-blue-700"
               onClick={onStart}
             >
               Start
             </Button>
             <Button
               variant="outline"
-              size="lg"
-              className="w-32 rounded-full"
+              size="sm"
+              className="w-24 rounded-full"
               onClick={() => onTest(sampleConversation)}
             >
               Test
@@ -100,8 +109,8 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             {transcript && (
               <Button
                 variant="secondary"
-                size="lg"
-                className="w-32 rounded-full"
+                size="sm"
+                className="w-24 rounded-full"
                 onClick={() => window.location.href = `/review?transcript=${encodeURIComponent(transcript)}`}
               >
                 Review
