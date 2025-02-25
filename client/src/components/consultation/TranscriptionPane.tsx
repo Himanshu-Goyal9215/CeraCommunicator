@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
@@ -36,6 +37,12 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
   const handleStop = () => {
     onStop();
     setHasRecorded(true);
+    sendMessage({ type: 'transcript', text: transcript });
+  };
+
+  const handleReRecord = () => {
+    setHasRecorded(false);
+    sendMessage({ type: 'clear' });
   };
 
   return (
@@ -44,7 +51,6 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
         <div className="w-full max-w-md flex flex-col items-center">
           <h1 className="text-2xl font-semibold mb-8">Voice Recorder</h1>
 
-          {/* Microphone Button */}
           <div className={cn(
             "w-40 h-40 rounded-full flex items-center justify-center mb-8",
             isListening ? "bg-blue-600" : "bg-blue-500",
@@ -63,12 +69,10 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             <Mic className="w-16 h-16 text-white relative z-10" />
           </div>
 
-          {/* Timer */}
           <div className="text-xl font-mono mb-6">
             {formatTime(recordingTime)}
           </div>
 
-          {/* Waveform */}
           <div className="w-full flex items-center justify-center gap-[2px] mb-8 h-8">
             {Array.from({ length: 32 }).map((_, i) => (
               <div
@@ -81,7 +85,6 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             ))}
           </div>
 
-          {/* Control Button */}
           <Button
             variant={isListening ? "destructive" : "default"}
             size="lg"
@@ -97,28 +100,14 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
       ) : (
         <div className="w-full max-w-lg mx-auto text-center">
           <h2 className="text-xl font-semibold mb-6">{transcript}</h2>
-          <div className="space-x-4">
-            <Button
-              variant="default"
-              size="lg"
-              className="w-32 rounded-full bg-blue-500"
-              onClick={() => {
-                sendMessage({ type: 'transcript', text: transcript });
-              }}
-            >
-              Submit
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-32 rounded-full"
-              onClick={() => {
-                setHasRecorded(false);
-              }}
-            >
-              Re-record
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-32 rounded-full"
+            onClick={handleReRecord}
+          >
+            Re-record
+          </Button>
         </div>
       )}
     </div>

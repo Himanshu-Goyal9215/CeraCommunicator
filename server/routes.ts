@@ -17,6 +17,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         const data = JSON.parse(message.toString());
 
+        if (data.type === 'clear') {
+          if (ws.readyState === ws.OPEN) {
+            ws.send(JSON.stringify({
+              type: 'analysis',
+              consultation: null
+            }));
+          }
+          return;
+        }
+
         if (data.type === 'transcript') {
           // Generate medical insights from transcript using Gemini
           const soapNote = await generateSOAPNote(data.text);
