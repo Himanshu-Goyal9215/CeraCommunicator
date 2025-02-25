@@ -79,14 +79,26 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             stop
           </Button>
         ) : (
-          <Button
-            variant="default"
-            size="lg"
-            className="w-32 rounded-full bg-blue-600 hover:bg-blue-700"
-            onClick={onStart}
-          >
-            Start
-          </Button>
+          <div className="flex flex-col gap-3">
+            <Button
+              variant="default"
+              size="lg"
+              className="w-32 rounded-full bg-blue-600 hover:bg-blue-700"
+              onClick={onStart}
+            >
+              Start
+            </Button>
+            {transcript && (
+              <Button
+                variant="secondary"
+                size="lg"
+                className="w-32 rounded-full"
+                onClick={() => window.location.href = `/review?transcript=${encodeURIComponent(transcript)}`}
+              >
+                Review
+              </Button>
+            )}
+          </div>
         )}
       </div>
 
