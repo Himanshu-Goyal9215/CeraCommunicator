@@ -1,0 +1,143 @@
+1.	Project Description
+Objective: Develop a real-time AI-powered clinical decision support system that transcribes doctor-patient conversations, generates SOAP notes, provides differential diagnoses, and suggests clinical pathways. In brief you need to develop a system that can transcribe a conversation through Voice to text module then use that transcription as prompt to an LLM for generation of SOAP Note and use that to suggest possible diagnosis and clinical pathway again through an LLM. 
+The system will function as a real-time AI assistant for doctors. When a patient walks into a clinic, the AI system will:
+1.	Listen and transcribe the conversation using speech-to-text technology.
+2.	Generate a structured SOAP note summarizing the discussion.
+3.	Provide a list of possible diagnoses based on symptoms and medical history.
+4.	Suggest appropriate clinical pathways for further treatment or tests.
+This will enable doctors to make faster, more accurate decisions
+2.	Sample Input and Output
+Below is a sample input and output of the system you need to develop. You can use this as a prompt to an LLM as well to generate the required output. Please note the actual system you build should be able to convert this voice conversation input into text.
+2.1: Doctor-Patient Dialogue ( text form of actual conversation)
+Doctor: Good morning, Mr. Smith. I’m Dr. Patel. What brings you in today?
+Patient: Good morning, doctor. I’ve been feeling really tired lately, and I have this persistent cough that won’t go away. It’s been going on for about three weeks now.
+Doctor: I see. Is the cough dry, or are you bringing up any mucus?
+Patient: It’s mostly dry, but sometimes I do cough up some yellowish mucus.
+Doctor: Have you noticed any fever, chills, or night sweats?
+Patient: Yes, I’ve had mild fevers on and off, and I wake up sweating at night.
+Doctor: Any shortness of breath or chest pain?
+Patient: I do feel a little short of breath when walking up stairs, but I haven’t had any real chest pain.
+Doctor: Have you had any unintended weight loss?
+Patient: Yes, I’ve lost about 7 pounds in the last month, but I haven’t changed my diet.
+Doctor: Do you smoke or have a history of smoking?
+Patient: I used to smoke about a pack a day for 15 years, but I quit five years ago.
+Doctor: Have you traveled recently or been around anyone who is sick?
+Patient: No recent travel, but I work in a homeless shelter, so I’m around a lot of different people.
+Doctor: Got it. I’d like to run some tests, including a chest X-ray and some blood work, to help us determine what might be causing your symptoms.
+
+
+2.2: SOAP Note ( Sample Output)
+Subjective:
+•	Chief Complaint (CC): Persistent cough for 3 weeks, fatigue, and weight loss.
+•	History of Present Illness (HPI):
+o	48-year-old male with a 3-week history of dry cough with occasional yellowish mucus.
+o	Reports low-grade fever, night sweats, and fatigue.
+o	Mild shortness of breath with exertion, 7-lb unintentional weight loss in one month.
+•	Past Medical History (PMH): No chronic illnesses reported.
+•	Social History (SH):
+o	Former smoker (15 pack-years, quit 5 years ago).
+o	Works in a homeless shelter (potential exposure risk).
+•	Review of Systems (ROS):
+o	Respiratory: Persistent dry cough, occasional mucus, mild exertional dyspnea.
+o	General: Fatigue, weight loss, fever, night sweats.
+o	Cardiovascular: No chest pain, palpitations, or leg swelling.
+________________________________________
+Objective:
+•	Vital Signs:
+o	Temperature: 99.5°F (37.5°C)
+o	Blood Pressure: 122/78 mmHg
+o	Heart Rate: 86 bpm
+o	Respiratory Rate: 18 breaths/min
+o	Oxygen Saturation: 96% on room air
+•	Physical Exam:
+o	General: Appears mildly fatigued, no acute distress.
+o	Respiratory: Mild bibasilar crackles, no wheezing.
+o	Cardiac: Regular rate and rhythm, no murmurs.
+o	Lymph Nodes: No significant lymphadenopathy.
+•	Initial Diagnostic Workup Ordered:
+o	Chest X-ray
+o	Complete Blood Count (CBC)
+o	Sputum culture and acid-fast bacillus (AFB) test
+o	Tuberculin skin test (PPD) or IGRA (Interferon-Gamma Release Assay)
+________________________________________
+Assessment & Plan:
+•	Assessment:
+o	48-year-old male with a history of chronic cough, weight loss, fatigue, and night sweats. Given his former smoking history and occupational exposure risk, infectious and neoplastic causes should be considered.
+•	Plan:
+o	Infectious Workup: Rule out tuberculosis (TB), pneumonia, and fungal infections.
+o	Imaging: Order a chest X-ray to check for pulmonary infiltrates or masses.
+o	Bloodwork: CBC to check for infection or anemia.
+o	Pulmonary Function Tests (PFTs) if no clear diagnosis after initial workup.
+o	Lifestyle Advice: Emphasize smoking cessation benefits and discuss further management after test results.
+
+
+
+
+
+2.3: Differential Diagnosis ( Sample Output)
+Given the persistent cough, weight loss, fatigue, and night sweats, the most likely differential diagnoses include:
+1.	Tuberculosis (TB)
+o	Chronic cough, weight loss, night sweats, and potential exposure risk due to work in a homeless shelter.
+o	AFB smear and culture needed for confirmation.
+2.	Lung Cancer (e.g., Non-Small Cell Lung Cancer)
+o	History of 15 pack-years of smoking, weight loss, persistent cough.
+o	Chest X-ray/CT scan needed to rule out malignancy.
+3.	Chronic Pulmonary Infections (e.g., Fungal Infections like Histoplasmosis or Coccidioidomycosis)
+o	Chronic cough with systemic symptoms in an immunocompetent individual.
+o	Consider fungal serologies if TB ruled out.
+4.	Community-Acquired Pneumonia (Atypical or Bacterial)
+o	More likely if fever and productive cough worsen.
+o	Sputum culture and chest X-ray needed.
+5.	Chronic Obstructive Pulmonary Disease (COPD) Exacerbation
+o	History of smoking, but less likely due to the absence of wheezing or chronic sputum production.
+o	Pulmonary function tests (PFTs) may help evaluate airflow obstruction.
+6.	Sarcoidosis
+o	Can present with cough, fatigue, and bilateral hilar lymphadenopathy on imaging.
+o	Serum ACE levels and biopsy may help confirm.
+7.	Gastroesophageal Reflux Disease (GERD)-Related Cough
+o	If no fever or systemic symptoms, GERD-related cough should be considered.
+Next Steps:
+•	Chest X-ray results will guide further workup (CT scan or bronchoscopy if needed).
+•	Sputum AFB testing for TB should be prioritized.
+•	Empiric antibiotics if bacterial pneumonia is suspected.
+•	If malignancy is suspected, refer for CT scan and pulmonology consult.
+
+
+
+
+
+
+
+
+
+
+
+
+
+2.4 Sample UI/UX
+
+ 
+
+
+________________________________________
+3.	Technical Requirements
+Below are suggestions about the tech stack you might need to implement the above requirement. You are allowed to try something different to enhance efficiency and performance. We would prefer you to use open source as much as possible.
+Frontend (Doctor’s Interface)
+•	Web application using Vue.js
+•	UI framework: Qasar with Nuxt.js
+Speech-to-Text (Transcription Engine)
+•	Any open source options: Google Speech-to-Text / Deepgram
+Natural Language Processing (NLP) & Clinical Decision Support
+•	LLM Models: GPT-4, Mistral, or Claude for text generation
+•	Fine-tuned models: BioMedGPT, BioBERT, or LLaMA for medical reasoning
+
+
+
+
+Backend (API & Data Processing)
+•	Python (FastAPI / Flask) for API development
+•	Database ( if required): 
+o	Firestore
+•	Message Queue: RabbitMQ or Kafka for real-time processing
+•	Real-time updates using WebSockets
+________________________________________
