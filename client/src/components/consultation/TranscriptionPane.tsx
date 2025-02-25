@@ -37,69 +37,67 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
     <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-[#0a0a2e] text-white">
       {/* Recording icon */}
       <div className={cn(
-        "w-32 h-32 rounded-full bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center mb-6",
+        "w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-blue-400 flex items-center justify-center mb-4",
         isListening && "animate-pulse"
       )}>
-        <Mic className="w-16 h-16" />
+        <Mic className="w-12 h-12" />
       </div>
 
       {/* Recording label and timer */}
-      <div className="text-center mb-6">
-        <h2 className="text-blue-400 text-xl mb-2">
+      <div className="text-center mb-4">
+        <h2 className="text-blue-400 mb-1">
           Recording {String(transcript.length).padStart(3, '0')}
         </h2>
-        <div className="text-2xl font-medium">
+        <div className="text-2xl font-medium text-pink-500">
           {formatTime(recordingTime)}
         </div>
       </div>
 
       {/* Waveform visualization */}
-      <div className="flex items-center gap-1 mb-8">
-        {Array.from({ length: 20 }).map((_, i) => (
+      <div className="flex items-center gap-[2px] mb-6 h-12">
+        {Array.from({ length: 32 }).map((_, i) => (
           <div
             key={i}
-            className={cn(
-              "w-2 bg-gradient-to-t from-purple-600 to-pink-500",
-              "animate-pulse transition-all duration-150",
-              isListening ? "h-12" : "h-2"
-            )}
+            className="w-1 bg-gradient-to-t from-purple-600 to-pink-500 transition-all duration-75"
             style={{
-              height: isListening ? `${Math.random() * 48 + 8}px` : '8px',
-              animationDelay: `${i * 0.1}s`
+              height: isListening ? `${Math.random() * 100}%` : '20%',
+              opacity: isListening ? 1 : 0.5
             }}
           />
         ))}
       </div>
 
       {/* Control buttons */}
-      {isListening ? (
-        <Button
-          variant="destructive"
-          size="lg"
-          className="w-32 rounded-full bg-pink-600 hover:bg-pink-700"
-          onClick={onStop}
-        >
-          Stop
-        </Button>
-      ) : (
-        <Button
-          variant="default"
-          size="lg"
-          className="w-32 rounded-full bg-blue-600 hover:bg-blue-700"
-          onClick={onStart}
-        >
-          Start
-        </Button>
-      )}
+      <div className="space-y-3">
+        {isListening ? (
+          <Button
+            variant="destructive"
+            size="lg"
+            className="w-32 rounded-full bg-pink-600 hover:bg-pink-700"
+            onClick={onStop}
+          >
+            stop
+          </Button>
+        ) : (
+          <Button
+            variant="default"
+            size="lg"
+            className="w-32 rounded-full bg-blue-600 hover:bg-blue-700"
+            onClick={onStart}
+          >
+            Start
+          </Button>
+        )}
+      </div>
 
       {/* Recording indicators */}
-      <div className="flex gap-2 mt-8">
+      <div className="flex gap-2 mt-6">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
             className={cn(
-              "w-2 h-2 rounded-full",
-              i === 2 ? "bg-purple-500" : "bg-gray-600"
+              "w-2 h-2 rounded-full transition-opacity",
+              i === Math.floor(recordingTime / 2) % 4 ? "bg-purple-500" : "bg-gray-600"
             )}
           />
         ))}
