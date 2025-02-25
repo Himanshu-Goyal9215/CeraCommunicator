@@ -14,6 +14,7 @@ interface Props {
 export default function TranscriptionPane({ transcript, isListening, onStart, onStop, sendMessage }: Props) {
   const [recordingTime, setRecordingTime] = useState(0);
   const [hasRecorded, setHasRecorded] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -83,14 +84,30 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
       ) : (
         <div className="w-full max-w-lg mx-auto text-center">
           <h2 className="text-2xl font-semibold mb-6">{transcript}</h2>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="w-24 rounded-full"
-            onClick={() => sendMessage({ type: 'transcript', text: transcript })}
-          >
-            Submit
-          </Button>
+          <div className="space-x-4">
+            <Button
+              variant="secondary"
+              size="sm"
+              className="w-24 rounded-full"
+              onClick={() => {
+                sendMessage({ type: 'transcript', text: transcript });
+                setIsSubmitted(true);
+              }}
+            >
+              Submit
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-24 rounded-full"
+              onClick={() => {
+                setHasRecorded(false);
+                setIsSubmitted(false);
+              }}
+            >
+              Re-record
+            </Button>
+          </div>
         </div>
       )}
     </div>
