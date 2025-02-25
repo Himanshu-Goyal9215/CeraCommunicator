@@ -111,9 +111,9 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
                 variant="secondary"
                 size="sm"
                 className="w-24 rounded-full"
-                onClick={() => window.location.href = `/review?transcript=${encodeURIComponent(transcript)}`}
+                onClick={() => onTest(transcript)}
               >
-                Review
+                Submit
               </Button>
             )}
           </div>
