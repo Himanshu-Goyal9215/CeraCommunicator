@@ -111,6 +111,8 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
               className="w-32 rounded-full bg-blue-500"
               onClick={() => {
                 sendMessage({ type: 'transcript', text: localTranscript });
+                setHasRecorded(false);
+                setLocalTranscript('');
               }}
             >
               Submit
