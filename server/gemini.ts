@@ -22,29 +22,43 @@ interface ClinicalPathway {
   recommendations: string[];
 }
 
+// Helper function to extract JSON from Gemini's response
+function extractJSON(text: string): any {
+  // Remove markdown formatting if present
+  const jsonMatch = text.match(/```(?:json)?\s*(\{[\s\S]*\})\s*```/);
+  const jsonString = jsonMatch ? jsonMatch[1] : text;
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error("Failed to parse JSON:", jsonString);
+    throw error;
+  }
+}
+
 // Generate a structured SOAP note from conversation transcript
 export async function generateSOAPNote(transcript: string): Promise<SOAPNote> {
   try {
     // Get the most capable Gemini model
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    
+
     // Craft a detailed prompt for SOAP note generation
-    const prompt = `As a medical scribe assistant, generate a detailed SOAP note from the following doctor-patient conversation. Format your response as JSON with the following structure:
+    const prompt = `Generate a SOAP note from this doctor-patient conversation.
+    Format your response as a JSON object with these exact keys:
     {
       "subjective": "patient's reported symptoms and history",
       "objective": "physical examination findings and vital signs",
       "assessment": "diagnosis and clinical reasoning",
       "plan": "treatment plan and next steps"
     }
-    
+
     Conversation transcript:
     ${transcript}`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
-    return JSON.parse(text);
+
+    return extractJSON(text);
   } catch (error) {
     console.error("Error generating SOAP note:", error);
     throw new Error("Failed to generate SOAP note");
@@ -55,9 +69,10 @@ export async function generateSOAPNote(transcript: string): Promise<SOAPNote> {
 export async function generateDiagnoses(transcript: string): Promise<Diagnosis[]> {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    
+
     // Prompt for generating differential diagnoses
-    const prompt = `As a clinical diagnosis assistant, analyze this conversation and provide possible diagnoses. Return a JSON array with this structure:
+    const prompt = `Analyze this conversation and provide possible diagnoses.
+    Format your response as a JSON array with this exact structure:
     [
       {
         "condition": "name of condition",
@@ -66,15 +81,15 @@ export async function generateDiagnoses(transcript: string): Promise<Diagnosis[]
       }
     ]
     List diagnoses in order of likelihood.
-    
+
     Conversation transcript:
     ${transcript}`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
-    const diagnoses = JSON.parse(text);
+
+    const diagnoses = extractJSON(text);
     return diagnoses.map((d: any) => ({
       condition: d.condition,
       description: d.description,
@@ -90,22 +105,23 @@ export async function generateDiagnoses(transcript: string): Promise<Diagnosis[]
 export async function generateClinicalPathway(transcript: string): Promise<ClinicalPathway> {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    
+
     // Prompt for generating treatment steps and recommendations
-    const prompt = `As a clinical pathway advisor, analyze this conversation and provide next steps and recommendations. Return JSON in this format:
+    const prompt = `Analyze this conversation and provide next steps and recommendations.
+    Format your response as a JSON object with this exact structure:
     {
       "steps": ["ordered list of next clinical steps"],
       "recommendations": ["list of additional recommendations"]
     }
-    
+
     Conversation transcript:
     ${transcript}`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
-    return JSON.parse(text);
+
+    return extractJSON(text);
   } catch (error) {
     console.error("Error generating clinical pathway:", error);
     throw new Error("Failed to generate clinical pathway");
