@@ -19,38 +19,47 @@ export default function TranscriptionPane({
   onTest
 }: TranscriptionPaneProps) {
   return (
-    <div className="space-y-4">
+    <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Live Transcription</h2>
-        <div className="space-x-2">
+        <div>
+          <h2 className="text-xl font-semibold">Live Transcription</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {isListening ? "Recording in progress..." : "Ready to record"}
+          </p>
+        </div>
+        <div className="space-x-3">
           <Button
             variant={isListening ? "destructive" : "default"}
+            size="lg"
             onClick={isListening ? onStop : onStart}
+            className="shadow-sm"
           >
             {isListening ? (
               <>
-                <MicOff className="mr-2 h-4 w-4" />
+                <MicOff className="mr-2 h-5 w-5" />
                 Stop Recording
               </>
             ) : (
               <>
-                <Mic className="mr-2 h-4 w-4" />
+                <Mic className="mr-2 h-5 w-5" />
                 Start Recording
               </>
             )}
           </Button>
           <Button
             variant="outline"
+            size="lg"
             onClick={() => onTest?.(sampleConversation)}
+            className="shadow-sm"
           >
-            <PlayCircle className="mr-2 h-4 w-4" />
+            <PlayCircle className="mr-2 h-5 w-5" />
             Test with Sample
           </Button>
         </div>
       </div>
 
-      <ScrollArea className="h-[400px] w-full rounded-md border p-4">
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">
+      <ScrollArea className="h-[400px] w-full rounded-lg border bg-muted/5 p-4">
+        <p className={`text-sm leading-relaxed whitespace-pre-wrap ${!transcript && 'text-muted-foreground italic'}`}>
           {transcript || "Transcription will appear here..."}
         </p>
       </ScrollArea>
