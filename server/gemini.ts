@@ -25,12 +25,15 @@ interface ClinicalPathway {
 // Helper function to extract JSON from Gemini's response
 function extractJSON(text: string): any {
   // Remove markdown formatting if present
-  const jsonMatch = text.match(/```(?:json)?\s*(\{[\s\S]*\})\s*```/);
-  const jsonString = jsonMatch ? jsonMatch[1] : text;
+  text = text.trim();
+  // Handle both ```json and ``` formats
+  if (text.startsWith('```')) {
+    text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+  }
   try {
-    return JSON.parse(jsonString);
+    return JSON.parse(text);
   } catch (error) {
-    console.error("Failed to parse JSON:", jsonString);
+    console.error("Failed to parse JSON:", text);
     throw error;
   }
 }
