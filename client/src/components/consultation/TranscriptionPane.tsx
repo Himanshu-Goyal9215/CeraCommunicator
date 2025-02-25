@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
@@ -44,21 +43,24 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
       {!hasRecorded ? (
         <div className="w-full max-w-md flex flex-col items-center">
           <h1 className="text-2xl font-semibold mb-8">Voice Recorder</h1>
-          
+
           {/* Microphone Button */}
           <div className={cn(
-            "w-32 h-32 rounded-full flex items-center justify-center mb-8",
-            isListening ? "bg-red-500" : "bg-red-400",
-            "relative"
+            "w-40 h-40 rounded-full flex items-center justify-center mb-8",
+            isListening ? "bg-blue-600" : "bg-blue-500",
+            "relative shadow-lg transition-all duration-200 hover:scale-105"
           )}>
             <div className={cn(
-              "absolute w-40 h-40 rounded-full border-4 border-mint-100 -z-10",
+              "absolute w-48 h-48 rounded-full border-4 border-blue-200 -z-10",
               isListening && "animate-ping"
             )} />
             <div className={cn(
-              "absolute w-36 h-36 rounded-full border-4 border-mint-200 -z-10"
+              "absolute w-44 h-44 rounded-full border-4 border-blue-300 -z-10"
             )} />
-            <Mic className="w-12 h-12 text-white" />
+            <div className={cn(
+              "absolute inset-2 rounded-full bg-gradient-to-br from-blue-400 to-blue-600"
+            )} />
+            <Mic className="w-16 h-16 text-white relative z-10" />
           </div>
 
           {/* Timer */}
@@ -71,7 +73,7 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             {Array.from({ length: 32 }).map((_, i) => (
               <div
                 key={i}
-                className="w-1 bg-red-400"
+                className="w-1 bg-blue-400"
                 style={{
                   height: isListening ? `${Math.random() * 100}%` : '20%',
                 }}
@@ -85,7 +87,7 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             size="lg"
             className={cn(
               "w-48 rounded-full font-medium",
-              isListening ? "bg-red-500" : "bg-red-400"
+              isListening ? "bg-blue-600" : "bg-blue-500"
             )}
             onClick={isListening ? handleStop : onStart}
           >
@@ -99,7 +101,7 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             <Button
               variant="default"
               size="lg"
-              className="w-32 rounded-full bg-red-400"
+              className="w-32 rounded-full bg-blue-500"
               onClick={() => {
                 sendMessage({ type: 'transcript', text: transcript });
               }}
