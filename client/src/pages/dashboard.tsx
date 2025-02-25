@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TranscriptionPane from "@/components/consultation/TranscriptionPane";
@@ -27,6 +27,10 @@ export default function Dashboard() {
     }
   }, [transcript]);
 
+  const handleTest = (testTranscript: string) => {
+    sendMessage({ type: 'transcript', text: testTranscript });
+  };
+
   const analysis = lastMessage?.type === 'analysis' ? lastMessage.consultation : null;
 
   return (
@@ -41,44 +45,50 @@ export default function Dashboard() {
         </div>
       </header>
 
+      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Card className="lg:col-span-2">
-            <Tabs defaultValue="record">
-              <TabsList className="w-full">
-                <TabsTrigger value="record">Record</TabsTrigger>
-                <TabsTrigger value="soap">SOAP Note</TabsTrigger>
-                <TabsTrigger value="diagnosis">Diagnosis</TabsTrigger>
-                <TabsTrigger value="pathway">Clinical Pathway</TabsTrigger>
-              </TabsList>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left Column - Transcription and Analysis */}
+          <div className="lg:col-span-8 space-y-8">
+            <Card className="shadow-lg">
+              <TranscriptionPane 
+                transcript={transcript}
+                isListening={isListening}
+                onStart={startListening}
+                onStop={stopListening}
+                onTest={handleTest}
+              />
+            </Card>
 
-              <TabsContent value="record">
-                <TranscriptionPane
-                  transcript={transcript}
-                  isListening={isListening}
-                  onStart={startListening}
-                  onStop={stopListening}
-                  sendMessage={sendMessage}
-                />
-              </TabsContent>
+            <Card className="shadow-lg">
+              <Tabs defaultValue="soap" className="p-6">
+                <TabsList className="grid grid-cols-3 w-full">
+                  <TabsTrigger value="soap">SOAP Note</TabsTrigger>
+                  <TabsTrigger value="diagnoses">Diagnoses</TabsTrigger>
+                  <TabsTrigger value="pathway">Clinical Pathway</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="soap">
-                <SOAPNote soapNote={analysis?.soapNote} />
-              </TabsContent>
+                <div className="mt-6">
+                  <TabsContent value="soap" className="m-0">
+                    <SOAPNote note={analysis?.soapNote} />
+                  </TabsContent>
 
-              <TabsContent value="diagnosis">
-                <DiagnosisList diagnoses={analysis?.diagnoses} />
-              </TabsContent>
+                  <TabsContent value="diagnoses" className="m-0">
+                    <DiagnosisList diagnoses={analysis?.diagnoses} />
+                  </TabsContent>
 
-              <TabsContent value="pathway">
-                <ClinicalPathway pathway={analysis?.clinicalPathway} />
-              </TabsContent>
-            </Tabs>
-          </Card>
+                  <TabsContent value="pathway" className="m-0">
+                    <ClinicalPathway pathway={analysis?.clinicalPathway} />
+                  </TabsContent>
+                </div>
+              </Tabs>
+            </Card>
+          </div>
 
-          <Card>
+          {/* Right Column - Recent Insights */}
+          <div className="lg:col-span-4 space-y-6">
             <RecentInsights consultations={consultations} />
-          </Card>
+          </div>
         </div>
       </main>
     </div>

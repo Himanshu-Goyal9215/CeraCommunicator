@@ -14,7 +14,6 @@ interface Props {
 export default function TranscriptionPane({ transcript, isListening, onStart, onStop, sendMessage }: Props) {
   const [recordingTime, setRecordingTime] = useState(0);
   const [hasRecorded, setHasRecorded] = useState(false);
-  const [localTranscript, setLocalTranscript] = useState('');
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -27,12 +26,6 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
     }
     return () => clearInterval(interval);
   }, [isListening]);
-
-  useEffect(() => {
-    if (!isListening && transcript) {
-      setLocalTranscript(transcript);
-    }
-  }, [isListening, transcript]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -103,18 +96,24 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
         </div>
       ) : (
         <div className="w-full max-w-lg mx-auto text-center">
-          <h2 className="text-xl font-semibold mb-6">{localTranscript}</h2>
+          <h2 className="text-xl font-semibold mb-6">{transcript}</h2>
           <div className="space-x-4">
+            <Button
+              variant="default"
+              size="lg"
+              className="w-32 rounded-full bg-blue-500"
+              onClick={() => {
+                sendMessage({ type: 'transcript', text: transcript });
+              }}
+            >
+              Submit
+            </Button>
             <Button
               variant="outline"
               size="lg"
               className="w-32 rounded-full"
               onClick={() => {
                 setHasRecorded(false);
-                setLocalTranscript('');
-                if (sendMessage) {
-                  sendMessage({ type: 'clear', text: '' });
-                }
               }}
             >
               Re-record
