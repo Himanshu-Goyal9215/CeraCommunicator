@@ -61,7 +61,17 @@ export async function generateSOAPNote(transcript: string): Promise<SOAPNote> {
     const response = await result.response;
     const text = response.text();
 
-    return extractJSON(text);
+    try {
+      return extractJSON(text);
+    } catch (error) {
+      // Fallback structure if JSON parsing fails
+      return {
+        subjective: text.substring(0, 500),
+        objective: "No structured data available",
+        assessment: "Please try again",
+        plan: "Please try again"
+      };
+    }
   } catch (error) {
     console.error("Error generating SOAP note:", error);
     throw new Error("Failed to generate SOAP note");

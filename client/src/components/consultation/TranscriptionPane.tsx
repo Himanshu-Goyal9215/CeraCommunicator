@@ -101,21 +101,19 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
             <Button
               variant="outline"
               size="sm"
-              className="w-24 rounded-full"
+              className="w-24 rounded-full bg-white hover:bg-gray-100"
               onClick={() => onTest(sampleConversation)}
             >
               Test
             </Button>
-            {transcript && (
-              <Button
-                variant="secondary"
-                size="sm"
-                className="w-24 rounded-full"
-                onClick={() => onTest(transcript)}
-              >
-                Submit
-              </Button>
-            )}
+            <Button
+              variant="secondary"
+              size="sm"
+              className="w-24 rounded-full"
+              onClick={() => onTest(transcript)}
+            >
+              Submit
+            </Button>
           </div>
         )}
       </div>
