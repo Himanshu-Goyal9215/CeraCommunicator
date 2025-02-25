@@ -106,24 +106,15 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
           <h2 className="text-xl font-semibold mb-6">{localTranscript}</h2>
           <div className="space-x-4">
             <Button
-              variant="default"
-              size="lg"
-              className="w-32 rounded-full bg-blue-500"
-              onClick={() => {
-                sendMessage({ type: 'transcript', text: localTranscript });
-                setHasRecorded(false);
-                setLocalTranscript('');
-              }}
-            >
-              Submit
-            </Button>
-            <Button
               variant="outline"
               size="lg"
               className="w-32 rounded-full"
               onClick={() => {
                 setHasRecorded(false);
                 setLocalTranscript('');
+                if (sendMessage) {
+                  sendMessage({ type: 'clear', text: '' });
+                }
               }}
             >
               Re-record
