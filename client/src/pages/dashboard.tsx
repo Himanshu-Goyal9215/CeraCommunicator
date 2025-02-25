@@ -27,14 +27,9 @@ export default function Dashboard() {
     }
   }, [transcript]);
 
-  // Clear analysis when receiving clear message
-  useEffect(() => {
-    if (lastMessage?.type === 'clear') {
-      setAnalysis(null);
-    }
-  }, [lastMessage]);
+  
 
-  const [analysis, setAnalysis] = useState(null);
+  
 
   const handleTest = (testTranscript: string) => {
     sendMessage({ type: 'transcript', text: testTranscript });
