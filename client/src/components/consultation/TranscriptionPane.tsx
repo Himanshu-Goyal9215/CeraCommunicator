@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
@@ -8,13 +9,12 @@ interface Props {
   isListening: boolean;
   onStart: () => void;
   onStop: () => void;
-  sendMessage: (message: { type: string; text: string }) => void; // Added sendMessage prop
+  sendMessage: (message: { type: string; text: string }) => void;
 }
 
 export default function TranscriptionPane({ transcript, isListening, onStart, onStop, sendMessage }: Props) {
   const [recordingTime, setRecordingTime] = useState(0);
   const [hasRecorded, setHasRecorded] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -28,81 +28,90 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
     return () => clearInterval(interval);
   }, [isListening]);
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}:${(Math.floor(Math.random() * 60)).toString().padStart(2, '0')}`;
+  };
+
   const handleStop = () => {
     onStop();
     setHasRecorded(true);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-[#0a0a2e] text-white">
+    <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-white">
       {!hasRecorded ? (
-        <>
+        <div className="w-full max-w-md flex flex-col items-center">
+          <h1 className="text-2xl font-semibold mb-8">Voice Recorder</h1>
+          
+          {/* Microphone Button */}
           <div className={cn(
-            "w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-blue-400 flex items-center justify-center mb-4",
-            isListening && "animate-pulse"
+            "w-32 h-32 rounded-full flex items-center justify-center mb-8",
+            isListening ? "bg-red-500" : "bg-red-400",
+            "relative"
           )}>
-            <Mic className="w-12 h-12" />
+            <div className={cn(
+              "absolute w-40 h-40 rounded-full border-4 border-mint-100 -z-10",
+              isListening && "animate-ping"
+            )} />
+            <div className={cn(
+              "absolute w-36 h-36 rounded-full border-4 border-mint-200 -z-10"
+            )} />
+            <Mic className="w-12 h-12 text-white" />
           </div>
 
-          {/* Waveform visualization */}
-          <div className="flex items-center gap-[2px] mb-6 h-24">
+          {/* Timer */}
+          <div className="text-xl font-mono mb-6">
+            {formatTime(recordingTime)}
+          </div>
+
+          {/* Waveform */}
+          <div className="w-full flex items-center justify-center gap-[2px] mb-8 h-8">
             {Array.from({ length: 32 }).map((_, i) => (
               <div
                 key={i}
-                className="w-2 bg-gradient-to-t from-purple-600 to-pink-500 transition-all duration-75"
+                className="w-1 bg-red-400"
                 style={{
                   height: isListening ? `${Math.random() * 100}%` : '20%',
-                  opacity: isListening ? 1 : 0.5
                 }}
               />
             ))}
           </div>
 
-          {/* Control buttons */}
-          <div className="space-y-3">
-            {isListening ? (
-              <Button
-                variant="destructive"
-                size="sm"
-                className="w-24 rounded-full bg-pink-600 hover:bg-pink-700"
-                onClick={handleStop}
-              >
-                Stop
-              </Button>
-            ) : (
-              <Button
-                variant="default"
-                size="sm"
-                className="w-24 rounded-full bg-blue-600 hover:bg-blue-700"
-                onClick={onStart}
-              >
-                Start
-              </Button>
+          {/* Control Button */}
+          <Button
+            variant={isListening ? "destructive" : "default"}
+            size="lg"
+            className={cn(
+              "w-48 rounded-full font-medium",
+              isListening ? "bg-red-500" : "bg-red-400"
             )}
-          </div>
-        </>
+            onClick={isListening ? handleStop : onStart}
+          >
+            {isListening ? "Stop recording" : "Start"}
+          </Button>
+        </div>
       ) : (
         <div className="w-full max-w-lg mx-auto text-center">
-          <h2 className="text-2xl font-semibold mb-6">{transcript}</h2>
+          <h2 className="text-xl font-semibold mb-6">{transcript}</h2>
           <div className="space-x-4">
             <Button
-              variant="secondary"
-              size="sm"
-              className="w-24 rounded-full"
+              variant="default"
+              size="lg"
+              className="w-32 rounded-full bg-red-400"
               onClick={() => {
                 sendMessage({ type: 'transcript', text: transcript });
-                setIsSubmitted(true);
               }}
             >
               Submit
             </Button>
             <Button
               variant="outline"
-              size="sm"
-              className="w-24 rounded-full"
+              size="lg"
+              className="w-32 rounded-full"
               onClick={() => {
                 setHasRecorded(false);
-                setIsSubmitted(false);
               }}
             >
               Re-record
