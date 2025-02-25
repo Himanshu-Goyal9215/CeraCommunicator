@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sampleConversation } from "@/lib/testData";
 
 interface Props {
   transcript: string;
@@ -87,6 +88,14 @@ export default function TranscriptionPane({ transcript, isListening, onStart, on
               onClick={onStart}
             >
               Start
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-32 rounded-full"
+              onClick={() => onTest(sampleConversation)}
+            >
+              Test
             </Button>
             {transcript && (
               <Button
