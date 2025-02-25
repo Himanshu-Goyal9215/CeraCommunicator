@@ -31,8 +31,25 @@ export default function Dashboard() {
 
   
 
+  const [ws, setWs] = useState<WebSocket | null>(null);
+
+  useEffect(() => {
+    const websocket = new WebSocket(`ws://${window.location.hostname}:5000/ws`);
+    websocket.onopen = () => console.log('Connected to server');
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'analysis') {
+        setAnalysis(data.consultation);
+      }
+    };
+    setWs(ws);
+    return () => websocket.close();
+  }, []);
+
   const handleTest = (testTranscript: string) => {
-    sendMessage({ type: 'transcript', text: testTranscript });
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'transcript', text: testTranscript }));
+    }
   };
 
   const analysis = lastMessage?.type === 'analysis' ? lastMessage.consultation : null;
