@@ -1,7 +1,21 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import * as dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+// Get the equivalent of __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error('GEMINI_API_KEY environment variable is not set');
+}
 
 // Initialize Gemini API with the provided key
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 // Type definitions for medical analysis output
 interface SOAPNote {
@@ -41,8 +55,7 @@ function extractJSON(text: string): any {
 // Generate a structured SOAP note from conversation transcript
 export async function generateSOAPNote(transcript: string): Promise<SOAPNote> {
   try {
-    // Get the most capable Gemini model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Craft a detailed prompt for SOAP note generation
     const prompt = `Generate a SOAP note from this doctor-patient conversation.
@@ -81,7 +94,7 @@ export async function generateSOAPNote(transcript: string): Promise<SOAPNote> {
 // Generate possible diagnoses with confidence scores
 export async function generateDiagnoses(transcript: string): Promise<Diagnosis[]> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Prompt for generating differential diagnoses
     const prompt = `Analyze this conversation and provide possible diagnoses.
@@ -117,7 +130,7 @@ export async function generateDiagnoses(transcript: string): Promise<Diagnosis[]
 // Generate recommended clinical pathway
 export async function generateClinicalPathway(transcript: string): Promise<ClinicalPathway> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Prompt for generating treatment steps and recommendations
     const prompt = `Analyze this conversation and provide next steps and recommendations.

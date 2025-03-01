@@ -1,35 +1,75 @@
+# CeraCommunicator
 
-# Clinical Decision Support System
+A medical consultation system powered by Google Gemini AI for generating SOAP notes and medical analysis. The system helps healthcare providers automate documentation and receive AI-assisted clinical insights in real-time.
 
-A real-time AI-powered clinical decision support system that transcribes doctor-patient conversations and generates medical insights.
+## ✨ Features
 
-## Features
-- Voice-to-text transcription
-- SOAP note generation
-- Differential diagnosis suggestions
-- Clinical pathway recommendations
+### Medical Documentation
+- Real-time medical documentation generation
+- AI-powered SOAP note creation with structured format
+- Smart diagnostic suggestions with confidence scores
+- Evidence-based clinical pathway recommendations
 
-## API Documentation
+### Technical Features
+- Real-time WebSocket communication
+- Modern, responsive UI with TailwindCSS
+- Secure data handling and storage
+- RESTful API endpoints
 
-### WebSocket Endpoints
-- `ws://[app-name].replit.app/ws`
-  - Messages:
-    - `{ type: 'transcript', text: string }` - Send transcription for analysis
-    - `{ type: 'clear' }` - Clear current analysis
-  - Responses:
-    - `{ type: 'analysis', consultation: {...} }` - Analysis results
+## 🚀 Setup
 
-### REST Endpoints
-- GET `/api/consultations` - Retrieve all consultations
-- GET `/api/consultations/:id` - Retrieve specific consultation
+### Prerequisites
+- Node.js v18+
+- Google Gemini API key ([Get it here](https://makersuite.google.com/app/apikey))
+- PostgreSQL database
 
-## Testing Instructions
-1. Visit the deployed app at: `https://[app-name].replit.app`
-2. Click the microphone button to start recording
-3. Speak or play sample doctor-patient conversation
-4. View generated SOAP notes, diagnoses, and clinical pathways
+### Installation
 
-## Development Setup
-1. Fork this Repl
-2. Add required secrets in the Secrets tab
-3. Click Run to start development server
+1. Clone and install dependencies:
+```bash
+git clone https://github.com/Himanshu-Goyal9215/CeraCommunicator.git
+cd CeraCommunicator
+npm install
+```
+
+2. Create `.env` file in project root:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+DATABASE_URL=your_postgresql_connection_string
+```
+
+3. Run the application:
+```bash
+# Development mode with hot reload
+npm run dev
+
+# Production build and start
+npm run build
+npm start
+```
+
+Access the application at `http://localhost:5000`
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React 18 with TypeScript
+- TailwindCSS for styling
+- WebSocket for real-time updates
+- Radix UI components
+
+### Backend
+- Express.js with TypeScript
+- Google Gemini AI for analysis
+- WebSocket Server
+- PostgreSQL with Drizzle ORM
+
+## 📁 Project Structure
+```
+CeraCommunicator/
+├── client/          # React frontend
+├── server/          # Express backend
+└── shared/          # Shared types
+```
+
+
