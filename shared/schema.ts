@@ -1,7 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-
+  
 // Define the consultations table to store medical consultation data
 export const consultations = pgTable("consultations", {
   id: serial("id").primaryKey(),
